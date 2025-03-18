@@ -40,6 +40,32 @@
 
                 <!-- Menu Dashboard -->
 
+                @php
+                    $isActive = in_array(Request::segment(2), ['kelas', 'student']) ? 'nav-active text-white' : '';
+                @endphp
+                <!-- Schools -->
+                <li class="sidebar-item {{ $isActive }}">
+                    <a class="sidebar-link" href="{{ route('superadmin.schools.index') }}" aria-expanded="false">
+                        <span>
+                            <iconify-icon icon="solar:layers-minimalistic-bold-duotone"
+                                class="fs-6 {{ $isActive }}"></iconify-icon>
+                        </span>
+                        <span
+                            class="hide-menu {{ in_array(Request::segment(2), ['kelas', 'student']) ? 'text-white' : '' }}">Schools</span>
+                    </a>
+                </li>
+
+
+                <!-- Users -->
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ route('superadmin.users.index') }}" aria-expanded="false">
+                        <span>
+                            <iconify-icon icon="solar:user-plus-rounded-bold-duotone" class="fs-6"></iconify-icon>
+                        </span>
+                        <span class="hide-menu">Users</span>
+                    </a>
+                </li>
+
                 <!-- Manage User School (Hanya untuk SUPERADMIN) -->
                 @if ($isSuperAdmin)
                     <li class="sidebar-item">
@@ -54,26 +80,15 @@
                     </li>
                 @endif
 
-
-                <!-- Schools -->
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('superadmin.schools.index') }}" aria-expanded="false">
-                        <span>
-                            <iconify-icon icon="solar:layers-minimalistic-bold-duotone" class="fs-6"></iconify-icon>
-                        </span>
-                        <span class="hide-menu">Schools</span>
-                    </a>
-                </li>
-
                 <!-- Users -->
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('superadmin.users.index') }}" aria-expanded="false">
+                {{-- <li class="sidebar-item">
+                    <a class="sidebar-link" href="#" aria-expanded="false">
                         <span>
                             <iconify-icon icon="solar:user-plus-rounded-bold-duotone" class="fs-6"></iconify-icon>
                         </span>
-                        <span class="hide-menu">Users</span>
+                        <span class="hide-menu">Classes</span>
                     </a>
-                </li>
+                </li> --}}
 
                 <!-- Menu Content -->
                 <li class="nav-small-cap">

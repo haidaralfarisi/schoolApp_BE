@@ -6,17 +6,33 @@ use App\Http\Controllers\Controller;
 use App\Models\ClassModel;
 use App\Models\School;
 use App\Models\Student;
+use App\Models\Userschool;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
     public function index()
     {
         $students = Student::with(['school', 'class'])->get();
-        $schools = School::all();
-        $classes = ClassModel::all();
-        return view('tusekolah.student.index', compact('students', 'schools', 'classes'));
+        $userschool = Userschool::where('user_id', Auth::user()->id)->first();
+        $school = School::where('school_id', $userschool->school_id)->first();
+        $classes = ClassModel::where('school_id', $school->school_id)->get();
+
+        $firstStudent = $students->first();
+        $schoolClasses = $firstStudent ? ClassModel::where('school_id', $firstStudent->school_id)->get() : collect([]);
+
+        return view('tusekolah.student.index', compact('students', 'school', 'classes'));
     }
+
+    public function getClasses(Request $request)
+    {
+        if ($request->ajax()) {
+            $schoolClasses = ClassModel::where('school_id', $request->school_id)->get();
+            return response()->json($schoolClasses);
+        }
+    }
+
 
     public function store()
     {

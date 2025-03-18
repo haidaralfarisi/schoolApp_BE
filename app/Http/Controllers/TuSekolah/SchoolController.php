@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\School;
+use App\Models\Userschool;
 use Illuminate\Http\Request;
 
 class SchoolController extends Controller
@@ -21,12 +22,12 @@ class SchoolController extends Controller
 
         // Jika SUPERADMIN, tampilkan semua sekolah
         if ($user->level === 'SUPERADMIN') {
-            $schools = School::all();
+            $userSchools = School::all();
         } else {
             // Jika user adalah TUSEKOLAH, hanya tampilkan sekolah yang terkait dengannya
-            $schools = $user->schools;
+            $userSchools = Userschool::where('user_id', $user->id)->get();
         }
 
-        return view('tusekolah.school.index', compact('schools'));
+        return view('tusekolah.school.index', compact('userSchools'));
     }
 }

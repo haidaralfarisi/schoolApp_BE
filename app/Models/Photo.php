@@ -25,7 +25,7 @@ class Photo extends Model
         return $this->belongsTo(School::class, 'school_id');
     }
 
-    public function class()
+    public function classes()
     {
         return $this->belongsTo(ClassModel::class, 'class_id');
     }

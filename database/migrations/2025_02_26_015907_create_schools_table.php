@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
             $table->string('school_id')->unique(); // Tetap unik jika ini ID khusus
-            $table->string('name_school'); // Hapus unique agar bisa duplikat
+            $table->string('school_name'); // Hapus unique agar bisa duplikat
             $table->string('region')->nullable();
             $table->string('address')->nullable();
             $table->string('email'); // Hapus unique agar bisa duplikat

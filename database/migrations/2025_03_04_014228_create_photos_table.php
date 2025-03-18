@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->foreignId('class_id')->constrained()->onDelete('cascade');
+            $table->string('school_id');
+            $table->string('class_id');
             $table->string('image'); // Menyimpan path gambar
             $table->text('description')->nullable();
             $table->enum('photo_type', ['public', 'private'])->default('public');
-            $table->foreignId('student_id')->nullable()->constrained()->onDelete('set null');
+            $table->string('student_id');
             $table->string('location')->nullable();
             $table->timestamps();
         });

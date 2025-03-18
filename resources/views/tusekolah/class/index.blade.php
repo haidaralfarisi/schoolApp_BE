@@ -41,134 +41,164 @@
                     </div>
                 @endif
 
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th width="30">No</th>
-                            <th>Class ID</th>
-                            <th>Class Name</th>
-                            <th>School ID</th>
-                            <th>Grade</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if ($classes->isEmpty())
-                            <tr>
-                                <td colspan="6" class="text-center">
-                                    <div class="py-4">
-                                        <img src="{{ asset('assets/icons/close.png') }}" alt="No Data" width="40">
-                                        <p class="mt-2 text-muted">Tidak ada data kelas.</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @else
-                            @foreach ($classes as $class)
-                                <tr>
-                                    <td class="text-center">{{ $loop->iteration }}</td>
-                                    <td>{{ $class->class_id }}</td>
-                                    <td>{{ $class->class_name }}</td>
-                                    <td>{{ $class->school->name_school ?? '-' }}</td>
-                                    <td>{{ $class->grade }}</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                Menu
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#editClassModal{{ $class->id }}">
-                                                        <i class="fas fa-edit text-primary"></i> Edit
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <form action="{{ route('tusekolah.classes.destroy', $class->id) }}"
-                                                        method="POST"
-                                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus class ini?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger">
-                                                            <i class="fas fa-trash-alt"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
+                <div class="accordion" id="accordionExample">
+                    @forelse ($data_kelas as $school_name => $kelas_list)
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ Str::slug($school_name) }}">
+                                <button class="accordion-button collapsed fw-bold fs-5" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapse{{ Str::slug($school_name) }}"
+                                    aria-expanded="false" aria-controls="collapse{{ Str::slug($school_name) }}">
+                                    {{ $school_name }}
+                                </button>
+                            </h2>
+                            <div id="collapse{{ Str::slug($school_name) }}" class="accordion-collapse collapse"
+                                aria-labelledby="heading{{ Str::slug($school_name) }}" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    @if ($kelas_list->isEmpty())
+                                        <p class="text-center text-muted">Tidak ada data kelas.</p>
+                                    @else
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Class ID</th>
+                                                    <th>Class Name</th>
+                                                    <th>Grade</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($kelas_list as $class)
+                                                    <tr>
+                                                        <td>{{ $class->class_id }}</td>
+                                                        <td>{{ $class->class_name }}</td>
+                                                        <td>{{ $class->grade }}</td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-secondary btn-sm dropdown-toggle"
+                                                                    type="button" data-bs-toggle="dropdown"
+                                                                    aria-expanded="false">
+                                                                    Menu
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li>
+                                                                        <a class="dropdown-item" href="#"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#editClassModal{{ $class->id }}">
+                                                                            <i class="fas fa-edit text-primary"></i> Edit
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <form
+                                                                            action="{{ route('tusekolah.classes.destroy', $class->class_id) }}"
+                                                                            method="POST"
+                                                                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus kelas ini?');">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button type="submit"
+                                                                                class="dropdown-item text-danger">
+                                                                                <i class="fas fa-trash-alt"></i> Delete
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
 
-                                <!-- Modal Edit -->
-                                <div class="modal fade" id="editClassModal{{ $class->id }}" tabindex="-1"
-                                    aria-labelledby="editClassModalLabel{{ $class->id }}" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editClassModalLabel">Edit Class</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="editClassForm"
-                                                    action="{{ route('tusekolah.classes.update', ['id' => $class->id]) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('PUT')
+                                                    <div class="modal fade" id="editClassModal{{ $class->id }}"
+                                                        tabindex="-1"
+                                                        aria-labelledby="editClassModalLabel{{ $class->id }}"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editClassModalLabel">Edit
+                                                                        Class</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form id="editClassForm"
+                                                                        action="{{ route('tusekolah.classes.update', ['id' => $class->id]) }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        @method('PUT')
 
-                                                    <!-- Class ID (Readonly jika tidak boleh diubah) -->
-                                                    <div class="mb-3">
-                                                        <label for="class_id" class="form-label">Class ID</label>
-                                                        <input type="text" class="form-control" id="class_id"
-                                                            name="class_id" value="{{ old('class_id', $class->class_id) }}"
-                                                            required>
+                                                                        <!-- Class ID (Readonly jika tidak boleh diubah) -->
+                                                                        <div class="mb-3">
+                                                                            <label for="class_id" class="form-label">Class
+                                                                                ID</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="class_id" name="class_id"
+                                                                                value="{{ old('class_id', $class->class_id) }}"
+                                                                                required>
+                                                                        </div>
+
+                                                                        <!-- Class Name -->
+                                                                        <div class="mb-3">
+                                                                            <label for="class_name" class="form-label">Class
+                                                                                Name</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="class_name" name="class_name"
+                                                                                value="{{ old('class_name', $class->class_name) }}"
+                                                                                required>
+                                                                        </div>
+
+                                                                        <!-- School ID (Dropdown) -->
+                                                                        <div class="mb-3">
+                                                                            <label for="school_id"
+                                                                                class="form-label">School</label>
+                                                                            <select class="form-control" name="school_id"
+                                                                                required>
+                                                                                @foreach ($schools as $school)
+                                                                                    <option
+                                                                                        value="{{ $school->school_id }}"
+                                                                                        {{ old('school_id', $class->school_id) == $school->school_id ? 'selected' : '' }}>
+                                                                                        {{ $school->school_name }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+
+
+                                                                        <!-- Grade -->
+                                                                        <div class="mb-3">
+                                                                            <label for="grade"
+                                                                                class="form-label">Grade</label>
+                                                                            <input type="number" class="form-control"
+                                                                                id="grade" name="grade"
+                                                                                value="{{ old('grade', $class->grade) }}"
+                                                                                required>
+                                                                        </div>
+
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"
+                                                                                class="btn btn-secondary"
+                                                                                data-bs-dismiss="modal">Close</button>
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary">Save
+                                                                                Changes</button>
+                                                                        </div>
+                                                                    </form>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-
-                                                    <!-- Class Name -->
-                                                    <div class="mb-3">
-                                                        <label for="class_name" class="form-label">Class Name</label>
-                                                        <input type="text" class="form-control" id="class_name"
-                                                            name="class_name"
-                                                            value="{{ old('class_name', $class->class_name) }}" required>
-                                                    </div>
-
-                                                    <!-- School ID (Dropdown) -->
-                                                    <div class="mb-3">
-                                                        <label for="school_id" class="form-label">School</label>
-                                                        <select class="form-control" name="school_id" required>
-                                                            @foreach ($schools as $school)
-                                                                <option value="{{ $school->id }}"
-                                                                    {{ $class->school_id == $school->id ? 'selected' : '' }}>
-                                                                    {{ $school->name_school }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-
-                                                    <!-- Grade -->
-                                                    <div class="mb-3">
-                                                        <label for="grade" class="form-label">Grade</label>
-                                                        <input type="number" class="form-control" id="grade"
-                                                            name="grade" value="{{ old('grade', $class->grade) }}"
-                                                            required>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save
-                                                            Changes</button>
-                                                    </div>
-                                                </form>
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    @endif
                                 </div>
-                            @endforeach
-                        @endif
-                    </tbody>
-                </table>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="py-4 text-center">
+                            <img src="{{ asset('assets/icons/close.png') }}" alt="No Data" width="40">
+                            <h4 class="mt-2">Tidak ada data Kelas.</h4>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
     </div>
@@ -196,7 +226,7 @@
                             <select name="school_id" id="school_id" class="form-control" required>
                                 <option value="">-- Choose School --</option>
                                 @foreach ($schools as $school)
-                                    <option value="{{ $school->id }}">{{ $school->name_school }}</option>
+                                    <option value="{{ $school->school_id }}">{{ $school->school_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -213,7 +243,6 @@
             </div>
         </div>
     </div>
-
     <!-- FontAwesome for Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
 @endsection

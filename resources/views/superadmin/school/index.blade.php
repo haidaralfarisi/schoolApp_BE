@@ -56,6 +56,9 @@
                             <th>School Name</th>
                             <th>Region</th>
                             <th>Email</th>
+                            <th></th>
+                            <th></th>
+
                             {{-- <th>Address</th> --}}
                             <th>Aksi</th>
                         </tr>
@@ -75,10 +78,19 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $school->school_id }}</td>
-                                    <td>{{ $school->name_school }}</td>
+                                    <td>{{ $school->school_name }}</td>
                                     <td>{{ $school->region }}</td>
                                     <td>{{ $school->email }}</td>
-                                    {{-- <td>{{ $school->address }}</td> --}}
+                                    <td>
+                                        <a href="{{ route('superadmin.kelas.index', $school->school_id) }}">
+                                            <i class="fas fa-school text-info"></i> Class
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('superadmin.students.index', $school ->school_id) }}">
+                                            <i class="fas fa-user-graduate text-info"></i> Student
+                                        </a>
+                                    </td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button"
@@ -108,7 +120,7 @@
                                     </td>
                                 </tr>
 
-                                <!-- Modal Edit -->
+
                                 <div class="modal fade" id="editModal{{ $school->id }}" tabindex="-1"
                                     aria-labelledby="editModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -130,28 +142,33 @@
                                                         <label for="school_id" class="form-label">School ID</label>
                                                         <input type="text" class="form-control" id="school_id"
                                                             name="school_id"
-                                                            value="{{ old('school_id', $school->school_id) }}" required>
+                                                            value="{{ $school->school_id }}" required>
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label for="name_school" class="form-label">School Name</label>
-                                                        <input type="text" class="form-control" id="name_school"
-                                                            name="name_school"
-                                                            value="{{ old('name_school', $school->name_school) }}"
+                                                        <label for="school_name" class="form-label">School Name</label>
+                                                        <input type="text" class="form-control" id="school_name"
+                                                            name="school_name"
+                                                            value="{{ $school->school_name }}"
                                                             required>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <label for="region" class="form-label">Region</label>
                                                         <input type="text" class="form-control" id="region"
-                                                            name="region" value="{{ old('region', $school->region) }}"
+                                                            name="region" value="{{ $school->region }}"
                                                             required>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="address" class="form-label">Address</label>
+                                                        <textarea class="form-control" id="address" name="address" required>{{ $school->address }}</textarea>
                                                     </div>
 
                                                     <div class="mb-3">
                                                         <label for="email" class="form-label">Email</label>
                                                         <input type="text" class="form-control" id="email"
-                                                            name="email" value="{{ old('email', $school->email) }}"
+                                                            name="email" value="{{ $school->email }}"
                                                             required>
                                                     </div>
 
@@ -169,7 +186,6 @@
                             @endforeach
                         @endif
                     </tbody>
-
                 </table>
                 {{-- {{ $users->links() }} --}}
 
@@ -189,8 +205,8 @@
                     <form action="{{ route('superadmin.schools.store') }}" method="POST">
                         @csrf
                         <div class="mb-3">
-                            <label for="name_school" class="form-label">School Name</label>
-                            <input type="text" class="form-control" id="name_school" name="name_school" required>
+                            <label for="school_name" class="form-label">School Name</label>
+                            <input type="text" class="form-control" id="school_name" name="school_name" required>
                         </div>
 
                         <div class="mb-3">

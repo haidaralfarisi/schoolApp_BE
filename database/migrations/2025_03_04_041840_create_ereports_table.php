@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('ereports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_id')->constrained()->onDelete('cascade');
-            $table->foreignId('class_id')->constrained()->onDelete('cascade');
+            $table->string('school_id');
+            $table->string('class_id');
             $table->string('report_file');
-            $table->foreignId('student_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('student_id');
+            $table->string('user_id');
             $table->timestamps();
         });
     }

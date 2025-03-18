@@ -20,7 +20,7 @@ class ClassModel extends Model
 
     public function school()
     {
-        return $this->belongsTo(School::class, 'school_id');
+        return $this->belongsTo(School::class, 'school_id', 'school_id');
     }
 
     public function teachers()

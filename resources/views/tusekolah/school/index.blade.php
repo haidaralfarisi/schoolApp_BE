@@ -35,7 +35,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($schools->isEmpty())
+                        @if ($userSchools->isEmpty())
                             <tr>
                                 <td colspan="10" class="text-center">
                                     <div class="py-4">
@@ -45,13 +45,13 @@
                                 </td>
                             </tr>
                         @else
-                            @foreach ($schools as $school)
+                            @foreach ($userSchools as $school)
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $school->school_id }}</td>
-                                    <td>{{ $school->name_school }}</td>
-                                    <td>{{ $school->region }}</td>
-                                    <td>{{ $school->email }}</td>
+                                    <td>{{ $school->school->school_name }}</td>
+                                    <td>{{ $school->school->region }}</td>
+                                    <td>{{ $school->school->email }}</td>
                                     {{-- <td>{{ $school->address }}</td> --}}
                                     {{-- <td>
                                         <div class="dropdown">

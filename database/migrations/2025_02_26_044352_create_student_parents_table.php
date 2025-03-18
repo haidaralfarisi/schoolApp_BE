@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('student_parents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('cascade'); // Relasi ke students
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relasi ke users (orang tua)
+            $table->string('student_id'); // Relasi ke students
+            $table->string('user_id'); // Relasi ke users (orang tua)
             $table->string('relation'); // Hubungan, misalnya "Ayah", "Ibu", "Wali"
             $table->timestamps();
         });

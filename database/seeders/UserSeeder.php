@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
 
         User::create([
             'nip' => '9876543246', // Sesuaikan dengan format NIP
-            'fullname' => 'TU Sekolah',
+            'fullname' => 'Slamet Zakaria',
             'email' => 'tusekolah@gmail.com',
             'password' => Hash::make('admin123'),
             'level' => 'TUSEKOLAH',

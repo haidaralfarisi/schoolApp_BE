@@ -20,6 +20,7 @@
     <!-- Bootstrap 5 & Custom Styles -->
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="{{ asset('assets/css/styles.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}" />
 
     @yield('custom_css') {{-- Untuk CSS khusus di halaman tertentu --}}
 

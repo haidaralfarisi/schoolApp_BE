@@ -19,21 +19,17 @@ class PhotoController extends Controller
         $schools = School::all();
         $classes = ClassModel::all();
         $students = Student::all();
-        return view('superadmin.photo.index', compact(
-            'photos',
-            'schools',
-            'classes',
-            'students'
-        ));
+        return view('superadmin.photo.index', compact('photos', 'schools', 'classes', 'students'));
     }
 
-    public function getClasses(Request $request)
-    {
-        if ($request->ajax()) {
-            $classes = ClassModel::where('school_id', $request->school_id)->get();
-            return response()->json($classes);
-        }
-    }
+
+    // public function getClasses(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $classes = ClassModel::where('school_id', $request->school_id)->get();
+    //         return response()->json($classes);
+    //     }
+    // }
 
     public function getStudents(Request $request)
     {
@@ -49,7 +45,7 @@ class PhotoController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'school_id' => 'required|exists:schools,id',
-            'class_id' => 'required|exists:school_classes,id',
+            'class_id' => 'required|exits:classes,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
         ]);
@@ -64,7 +60,8 @@ class PhotoController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('photos.index')->with('success', 'Photo berhasil ditambahkan!');
+
+        return redirect()->back()->with('success', 'Photo berhasil ditambahkan!');
     }
 
     public function update(Request $request, Photo $photo)

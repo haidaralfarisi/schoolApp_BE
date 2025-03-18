@@ -34,17 +34,20 @@
 
                 </div>
 
-                @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ session('success') }}
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
-                @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
                     </div>
                 @endif
 
@@ -139,13 +142,34 @@
                                                             required>
                                                     </div>
 
-                                                    <div class="mb-3">
+                                                    <div class="mb-3 position-relative">
                                                         <label for="level" class="form-label">Level</label>
-                                                        <input type="text" class="form-control" id="level"
-                                                            name="level" value="{{ old('level', $user->level) }}"
-                                                            required>
+                                                        <div class="position-relative">
+                                                            <select class="form-control pe-5" id="level" name="level"
+                                                                required>
+                                                                <option value="SUPERADMIN"
+                                                                    {{ old('level', $user->level) == 'SUPERADMIN' ? 'selected' : '' }}>
+                                                                    SUPERADMIN</option>
+                                                                <option value="KEUANGAN_PUSAT"
+                                                                    {{ old('level', $user->level) == 'KEUANGAN_PUSAT' ? 'selected' : '' }}>
+                                                                    KEUANGAN PUSAT</option>
+                                                                <option value="TU_SEKOLAH"
+                                                                    {{ old('level', $user->level) == 'TU_SEKOLAH' ? 'selected' : '' }}>
+                                                                    TU SEKOLAH</option>
+                                                                <option value="TU_KEUANGAN"
+                                                                    {{ old('level', $user->level) == 'TU_KEUANGAN' ? 'selected' : '' }}>
+                                                                    TU KEUANGAN</option>
+                                                                <option value="GURU"
+                                                                    {{ old('level', $user->level) == 'GURU' ? 'selected' : '' }}>
+                                                                    GURU</option>
+                                                                <option value="ORANG_TUA"
+                                                                    {{ old('level', $user->level) == 'ORANG_TUA' ? 'selected' : '' }}>
+                                                                    ORANG TUA</option>
+                                                            </select>
+                                                            <i class="fas fa-chevron-down position-absolute"
+                                                                style="right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
+                                                        </div>
                                                     </div>
-
 
                                                     <div class="mb-3">
                                                         <label for="photo" class="form-label">Photo</label>
@@ -197,23 +221,30 @@
                         @csrf
                         <div class="mb-3">
                             <label for="nip" class="form-label">NIP</label>
-                            <input placeholder="nip" type="text" class="form-control" id="nip" name="nip"
+                            <input placeholder="NIP" type="text" class="form-control" id="nip" name="nip"
                                 required>
                         </div>
                         <div class="mb-3">
                             <label for="fullname" class="form-label">Full Name</label>
-                            <input placeholder="fullname" type="text" class="form-control" id="fullname"
+                            <input placeholder="Full Name" type="text" class="form-control" id="fullname"
                                 name="fullname" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input placeholder="email" type="text" class="form-control" id="email"
+                            <input placeholder="Email" type="text" class="form-control" id="email"
                                 name="email" required>
                         </div>
                         <div class="mb-3">
                             <label for="level" class="form-label">Level</label>
-                            <input placeholder="level" type="text" class="form-control" id="level"
-                                name="level" required>
+                            <select class="form-control" id="level" name="level" required>
+                                <option value="" disabled selected>Pilih Level</option>
+                                <option value="SUPERADMIN">SUPERADMIN</option>
+                                <option value="KEUANGAN_PUSAT">KEUANGAN PUSAT</option>
+                                <option value="TU_SEKOLAH">TU SEKOLAH</option>
+                                <option value="TU_KEUANGAN">TU KEUANGAN</option>
+                                <option value="GURU">GURU</option>
+                                <option value="ORANG_TUA">ORANG TUA</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="photo" class="form-label">Photo</label>
@@ -221,7 +252,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input placeholder="password" type="password" class="form-control" id="password"
+                            <input placeholder="Password" type="password" class="form-control" id="password"
                                 name="password" required>
                         </div>
                         <div class="modal-footer">

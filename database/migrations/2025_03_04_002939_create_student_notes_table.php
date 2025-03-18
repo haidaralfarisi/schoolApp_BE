@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('student_notes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('school_id')->constrained()->onDelete('cascade'); 
-            $table->foreignId('class_id')->constrained()->onDelete('cascade');  
-            $table->foreignId('student_id')->constrained()->onDelete('cascade');  
+            $table->string('school_id');
+            $table->string('class_id'); 
+            $table->string('student_id'); 
             $table->string('title');
             $table->text('note');
             $table->string('image')->nullable(); // Menyimpan path gambar

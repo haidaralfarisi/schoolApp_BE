@@ -20,9 +20,9 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nip' => 'required',
+            'nip' => ['required', 'numeric', 'unique:users,nip'],
             'fullname' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => ['required', 'email', 'unique:users,email'],
             'password' => 'required|min:6',
             'level' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:2048',

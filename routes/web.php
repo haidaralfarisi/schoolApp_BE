@@ -1,10 +1,13 @@
 <?php
 
+use App\Exports\StudentTemplateExport;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use App\Http\Controllers\SuperAdmin\UserController as SUPERADMINUSER;
 use App\Http\Controllers\SuperAdmin\VideoController as SUPERADMINVIDEO;
 use App\Http\Controllers\SuperAdmin\PhotoController as SUPERADMINPHOTO;
 use App\Http\Controllers\SuperAdmin\SchoolController as SUPERADMINSCHOOL;
+use App\Http\Controllers\SuperAdmin\ClassController as SUPERADMINCLASS;
+use App\Http\Controllers\SuperAdmin\StudentController as SUPERADMINSTUDENT;
 use App\Http\Controllers\Superadmin\ManageUserSchoolController as SUPERADMINMANAGE;
 
 
@@ -39,8 +42,10 @@ use App\Http\Controllers\Guru\NoteController as GuruNote;
 use App\Http\Controllers\TuKeuangan\TuKeuanganController;
 use App\Http\Controllers\OrangTua\OrangTuaController;
 use App\Http\Controllers\KeuanganPusat\KeuanganPusatController;
+use App\Http\Controllers\StudentImportController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -68,13 +73,31 @@ Route::prefix('superadmin')->middleware(['auth', 'level:SUPERADMIN'])->group(fun
     Route::get('/schools', [SUPERADMINSCHOOL::class, 'index'])->name('superadmin.schools.index');
     Route::post('/schools', [SUPERADMINSCHOOL::class, 'store'])->name('superadmin.schools.store');
     Route::put('/schools/{id}', [SUPERADMINSCHOOL::class, 'update'])->name('superadmin.schools.update');
-
     Route::delete('/schools/{id}', [SUPERADMINSCHOOL::class, 'destroy'])->name('superadmin.schools.destroy');
 
+
+    Route::get('/kelas/{school_id}', [SUPERADMINCLASS::class, 'index'])->name('superadmin.kelas.index');
+    Route::get('/student/{school_id}', [SUPERADMINSTUDENT::class, 'index'])->name('superadmin.students.index');
+    Route::post('/students/store', [SUPERADMINSTUDENT::class, 'store'])->name('superadmin.students.store');
+    Route::put('/students/{school_id}', [SUPERADMINSTUDENT::class, 'update'])->name('superadmin.students.update');
+    // Route::delete('/students/{school_id}', [SUPERADMINSTUDENT::class, 'destroy'])->name('superadmin.students.destroy');
+    // Route::delete('/student/{id}', [SUPERADMINSTUDENT::class, 'destroy'])->name('superadmin.students.destroy');
+    Route::delete('/students/{student_id}', [SUPERADMINSTUDENT::class, 'destroy'])->name('superadmin.students.destroy');
+
+
+    Route::get('/import', [StudentImportController::class, 'showImportForm']);
+    Route::post('/import', [StudentImportController::class, 'import'])->name('superadmin.students.import');
+
+    Route::get('/students/template', function () {
+        return Excel::download(new StudentTemplateExport, 'Student_Template.xlsx');
+    })->name('students.template');
+
+
+
     # Untuk Aksi Data Schools
-    Route::get('/students', [GuruStudent::class, 'index'])->name('superadmin.students.index');
-    Route::post('/students', [SUPERADMINVIDEO::class, 'store'])->name('superadmin.students.store');
-    Route::delete('/students/{id}', [GuruStudent::class, 'destroy'])->name('superadmin.students.destroy');
+    // Route::get('/students', [GuruStudent::class, 'index'])->name('superadmin.students.index');
+    // Route::post('/students', [SUPERADMINVIDEO::class, 'store'])->name('superadmin.students.store');
+    // Route::delete('/students/{id}', [GuruStudent::class, 'destroy'])->name('superadmin.students.destroy');
 
     # Untuk Aksi Data Videos
     Route::get('/videos', [SUPERADMINVIDEO::class, 'index'])->name('superadmin.videos.index');
@@ -85,13 +108,19 @@ Route::prefix('superadmin')->middleware(['auth', 'level:SUPERADMIN'])->group(fun
 
     # Untuk Aksi Data Photos
     Route::get('/photos', [SUPERADMINPHOTO::class, 'index'])->name('superadmin.photos.index');
+    Route::post('/photos', [SUPERADMINPHOTO::class, 'store'])->name('superadmin.photos.store');
+    Route::delete('/photos/{id}', [SUPERADMINPHOTO::class, 'destroy'])->name('superadmin.photos.destroy');
+
+
     Route::get('/photos/get-classes', [SUPERADMINPHOTO::class, 'getClasses'])->name('superadmin.photos.getClasses');
     Route::get('/photos/get-students', [SUPERADMINPHOTO::class, 'getStudents'])->name('superadmin.photos.getStudents');
 
 
     Route::get('/manage-userschools', [SUPERADMINMANAGE::class, 'index'])->name('superadmin.manage-userschools');
     Route::post('/manage-userschools', [SUPERADMINMANAGE::class, 'store'])->name('superadmin.manage-userschools.store');
-    Route::delete('/manage-userschools/{userId}/{schoolId}', [SUPERADMINMANAGE::class, 'destroy'])
+    Route::put('/superadmin/manage-userschools/{id}', [SUPERADMINMANAGE::class, 'update'])
+        ->name('superadmin.manage-userschools.update');
+    Route::delete('/manage-userschools/{Id}', [SUPERADMINMANAGE::class, 'destroy'])
         ->name('manage-userschools.destroy');
 });
 
@@ -108,6 +137,7 @@ Route::prefix('tusekolah')->middleware(['auth', 'level:TUSEKOLAH'])->group(funct
     Route::put('/schools/{id}', [TusekolahSCHOOL::class, 'update'])->name('tusekolah.schools.update');
     Route::delete('/schools/{id}', [TusekolahSCHOOL::class, 'destroy'])->name('tusekolah.schools.destroy');
 
+
     # Untuk Aksi Data Class
     Route::get('/classes', [TusekolahCLASS::class, 'index'])->name('tusekolah.classes.index');
     Route::post('/classes', [TusekolahCLASS::class, 'store'])->name('tusekolah.classes.store');
@@ -115,6 +145,11 @@ Route::prefix('tusekolah')->middleware(['auth', 'level:TUSEKOLAH'])->group(funct
     Route::delete('/classes/{id}', [TusekolahCLASS::class, 'destroy'])->name('tusekolah.classes.destroy');
 
     Route::get('/students', [TusekolahSTUDENT::class, 'index'])->name('tusekolah.students.index');
+    Route::post('/students', [TusekolahSTUDENT::class, 'store'])->name('tusekolah.students.store');
+    Route::put('/students/{id}', [TusekolahSTUDENT::class, 'update'])->name('tusekolah.students.update');
+
+    Route::get('/students/get-classes', [TusekolahSTUDENT::class, 'getClasses'])->name('tusekolah.students.getClasses');
+
 
 
     Route::get('/ereports', [TusekolahEREPORT::class, 'index'])->name('tusekolah.ereports.index');

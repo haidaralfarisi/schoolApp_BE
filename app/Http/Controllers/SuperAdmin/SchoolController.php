@@ -11,15 +11,16 @@ class SchoolController extends Controller
 {
     public function index()
     {
-        $schools = School::all();
+        $schools = School::with('classes.students')->get();
         return view('superadmin.school.index', compact('schools'));
     }
 
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'school_id' => 'required|unique:schools,school_id',
-            'name_school' => 'required|string',
+            'school_name' => 'required|string',
             'region' => 'nullable|string',
             'address' => 'nullable|string',
             'email' => 'sometimes|nullable|email',
@@ -29,7 +30,7 @@ class SchoolController extends Controller
 
         School::create([
             'school_id' => $validated['school_id'],
-            'name_school' => $validated['name_school'],
+            'school_name' => $validated['school_name'],
             'region' => $validated['region'] ?? null,
             'address' => $validated['address'] ?? null,
             'email' => $validated['email'],
@@ -44,12 +45,11 @@ class SchoolController extends Controller
 
         $validated = $request->validate([
             'school_id'    => 'required|string',
-            'name_school'  => 'required|string',
+            'school_name'  => 'required|string',
             'region'       => 'nullable|string',
             'address'      => 'nullable|string',
             'email'        => 'required|email',
         ]);
-
 
         $school = School::findOrFail($id);
 

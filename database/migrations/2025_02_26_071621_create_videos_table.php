@@ -16,8 +16,8 @@ return new class extends Migration
             // $table->string('video_id')->unique(); // ID unik untuk video
             $table->string('title'); // Judul video
             $table->text('description')->nullable(); // Deskripsi video
-            $table->foreignId('school_id')->constrained()->onDelete('cascade'); // Relasi ke schools
-            $table->foreignId('class_id')->constrained('classes')->onDelete('cascade'); // Relasi ke classes
+            $table->string('school_id');// Relasi ke schools
+            $table->string('class_id'); // Relasi ke classes
             $table->string('url'); // URL video
             $table->timestamps();
         });

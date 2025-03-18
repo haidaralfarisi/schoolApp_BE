@@ -48,7 +48,7 @@
                             <th>Title</th>
                             <th>School ID</th>
                             <th>Class ID</th>
-                            {{-- <th>Url</th> --}}
+                            <th>Url</th>
                             {{-- <th>Description</th> --}}
                             <th>Aksi</th>
                         </tr>
@@ -68,9 +68,9 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $video->title }}</td>
-                                    <td>{{ $video->school->name_school }}</td>
+                                    <td>{{ $video->school->school_name }}</td>
                                     <td>{{ $video->schoolClass->class_id ?? '' }}</td>
-                                    {{-- <td>{{ $video->url }}</td> --}}
+                                    <td>{{ $video->url }}</td>
                                     {{-- <td>{{ $video->description }}</td> --}}
                                     <td>
                                         <div class="dropdown">
